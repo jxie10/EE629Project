@@ -102,26 +102,29 @@ def distance():
 def checkfront():
     init()
     dist = distance()
-    x = random.randrange(0,2)
     
     if dist < 30:
         print("Close! Distance: {:.2f} cm".format(dist))
-        if x == 1: 
+        init()
+        turnLeft(1)
+        init()
+        dist = distance()
+        if dist < 25:
             init()
-            turnLeft(1)
-        else:
+            back(1)
             init()
-            turnRight(1)
+            turnRight(2)
     if dist < 20:
         print("Too Close! Distance: {:.2f} cm".format(dist))
         init()
         back(1)
-        if x == 1:
+        init()
+        spinLeft(0.8)
+        init()
+        dist = distance()
+        if dist < 15:
             init()
-            spinLeft(0.8)
-        else:
-            init()
-            spinRight(0.8)
+            spinRight(1.6)
     if dist < 10:
         print("Too much Close!!! Distance: {:.2f} cm".format(dist))
         init()
@@ -130,7 +133,7 @@ def checkfront():
 def autodrive():
     checkfront()
     init()
-    go(0.5)
+    go(0.1)
     print("The distance of front now is: %0.2f cm" %distance())
         
 try:
