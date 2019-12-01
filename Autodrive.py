@@ -95,60 +95,46 @@ def distance():
         pass
     end = time.time()
 
-    return (end - start)*34300/2
+    distance = (end - start)*34300/2
     gpio.cleanup()
     return distance
 
-def cheack_front():
+def checkfront():
     init()
     dist = distance()
-
-    if dist < 15:
+    x = random.randrange(0,2)
+    
+    if dist < 30:
         print("Close! Distance: {:.2f} cm".format(dist))
+        if x == 1: 
+            init()
+            turnLeft(1)
+        else:
+            init()
+            turnRight(1)
+    if dist < 20:
+        print("Too Close! Distance: {:.2f} cm".format(dist))
         init()
         back(1)
+        if x == 1:
+            init()
+            spinLeft(0.8)
+        else:
+            init()
+            spinRight(0.8)
+    if dist < 10:
+        print("Too much Close!!! Distance: {:.2f} cm".format(dist))
         init()
-        dist = distance()
-        if dist < 15:
-            print("Too Close! Distance: {:.2f} cm".format(dist))
-            init()
-            spinLeft(3)
-            init()
-            back(1)
-            dist = distance()
-            if dist < 15:
-                print("Too much Close!!! Distance: {:.2f} cm".format(dist))
-                stop(2)
+        back(2)
 
 def autodrive():
-    tf = 0.1
-    x = random.randrange(0,3)
-
-    if x == 0:
-        check_front()
-        init()
-        go(1)
-        print("Fowarding. The distance now is: %0.2f cm" %distance())
-    elif x == 1:
-        cheack_front()
-        init()
-        spinLeft(0.3)
-        print("Spining left. The distance now is: %0.2f cm" %distance())
-    elif x == 2:
-        cheack_front()
-        init()
-        spinRight(0.15)
-        print("Spining right. The distance now is: %0.2f cm" %distance())
-    elif x == 3:
-        cheack_front()
-        init()
-        spinRight(tf)
-        print("Spining right. The distance now is: %0.2f cm" %distance())
-
-#go(3)
-#back(3)
-#turnLeft(3)
-#turnRight(3)
-#spinLeft(3)
-#spinRight(3)
-#Stop(3)
+    checkfront()
+    init()
+    go(0.5)
+    print("The distance of front now is: %0.2f cm" %distance())
+        
+try:
+    while True:
+        autodrive()
+except KeyboardInterrupt:
+    gpio.cleanup()
